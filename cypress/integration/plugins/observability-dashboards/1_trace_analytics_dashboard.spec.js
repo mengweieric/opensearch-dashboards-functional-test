@@ -92,23 +92,6 @@ describe.skip('Testing plots', () => {
     setTimeFilter();
   });
 
-  it('Renders service map', () => {
-    cy.get('text.ytitle[data-unformatted="Latency (ms)"]').should('exist');
-    cy.get('text[data-unformatted="200"]').should('exist');
-    cy.get('.vis-network').should('exist');
-
-    cy.get('.euiToggle__input[title="Error rate"]').click();
-    cy.get('text.ytitle[data-unformatted="Error rate"]').should('exist');
-    cy.get('text[data-unformatted="10%"]').should('exist');
-
-    cy.get('.euiToggle__input[title="Throughput"]').click();
-    cy.get('text.ytitle[data-unformatted="Throughput"]').should('exist');
-    cy.get('text[data-unformatted="60"]').should('exist');
-
-    cy.get('input[type="search"]').eq(1).focus().type('payment{enter}');
-    cy.wait(delayTime);
-  });
-
   it('Renders plots', () => {
     cy.get('text.ytitle[data-unformatted="Error rate (%)"]').should('exist');
     cy.get('text.annotation-text[data-unformatted="Now: 0%"]').should('exist');

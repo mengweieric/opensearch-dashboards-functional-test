@@ -45,6 +45,12 @@ describe('Testing traces table', () => {
     cy.contains('-').should('exist');
   });
 
+  it('Sorts the traces table', () => {
+    cy.get('.euiTableRow').first().contains('-').should('exist');
+    cy.get('.euiTableCellContent').contains('Trace group').click();
+    cy.get('.euiTableRow').first().contains('/**').should('exist');
+  });
+
   it('Searches correctly', () => {
     cy.get('input[type="search"]').focus().type(`${TRACE_ID}{enter}`);
     cy.get('.euiButton__text').contains('Refresh').click();
@@ -75,19 +81,20 @@ describe('Testing trace view', () => {
     cy.contains(`"${SPAN_ID}"`).should('exist');
   });
 
-  it('Renders data grid, flyout and filters', () => {
-    cy.get('.euiToggle__input[title="Span list"]').click({ force: true });
-    cy.contains('2 columns hidden').should('exist');
-
-    cy.get('button[data-datagrid-interactable="true"]').eq(0).click({ force: true });
+  it('Has working breadcrumbs', () => {
+    cy.get(
+      `.euiBreadcrumb[href="#/trace_analytics/traces/${TRACE_ID}"]`
+    ).click();
     cy.wait(delayTime);
-    cy.contains('Span detail').should('exist');
-    cy.contains('Span attributes').should('exist');
-    cy.get('.euiTextColor').contains('Span ID').trigger('mouseover');
-    cy.get('.euiButtonIcon[aria-label="span-flyout-filter-icon"').click({ force: true });
+    cy.get('h2.euiTitle').contains(TRACE_ID).should('exist');
+    cy.get('.euiBreadcrumb[href="#/trace_analytics/traces"]').click();
     cy.wait(delayTime);
-
-    cy.get('.euiBadge__text').contains('spanId: ').should('exist');
-    cy.contains('Spans (1)').should('exist');
+    cy.get('.euiTitle').contains('Traces').should('exist');
+    cy.get('.euiBreadcrumb[href="#/trace_analytics/home"]').click();
+    cy.wait(delayTime);
+    cy.get('.euiTitle').contains('Dashboard').should('exist');
+    cy.get('.euiBreadcrumb[href="observability-dashboards#/"]').click();
+    cy.wait(delayTime);
+    cy.get('.euiTitle').contains('Event analytics').should('exist');
   });
 });
